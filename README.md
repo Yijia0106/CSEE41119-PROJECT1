@@ -27,49 +27,49 @@ This program has an error detection mechanism to check every varaiables mentione
 Most of the operations listed below have a block-and-wait mechanism: client would sleep for around 0.5 second and check if the previous command is acknowledged by the target. If it is, subsequent commands are permissble. Otherwise, the client would either report to the server or disconnect.
 
 #### Send private message to online client (normal)
-```http
+```
   send someone msg
 ```
 
 #### Create a group chat (normal)
 
-```http
+```
   create_group group_name
 ```
 
 #### Show all the existing grou chat (normal)
 
-```http
+```
   list_groups
 ```
 
 #### Join a specific group chat (normal)
 
-```http
+```
   join_group group_name
 ```
 
 #### Unregister self from server (normal/inGroup)
 
-```http
+```
   Dereg user_name
 ```
 
 #### Send group message (inGroup)
 
-```http
+```
   send_group msg
 ```
 
 #### Show all members within the same group chat (inGroup)
 
-```http
+```
   list_members
 ```
 
 #### leave the group chat (inGroup)
 
-```http
+```
   leave_group
 ```
 
