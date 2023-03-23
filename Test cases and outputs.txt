@@ -1,0 +1,218 @@
+Here are some test cases and the corresponding outputs:
+
+Test Codes 1:
+
+python3 ChatApp.py -s 5000
+python3 ChatApp.py -c userA localhost 5000 6000
+python3 ChatApp.py -c userB localhost 5000 6001
+python3 ChatApp.py -c userC localhost 5000 6002
+userA: send userB Hello B
+userB: send userC Hello C
+userC: send userA Hello A
+userA: dereg userA
+userB: send userA Are u here?
+userC: send userA Are u here?
+userB, userC: control C/close terminal
+
+Output for Server:
+
+>>> [Server is online...]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [ACK Sent!]
+
+Output for userA:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online'], 'userB': ['127.0.0.1', 6001, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online'], 'userB': ['127.0.0.1', 6001, 'Online'], 'userC': ['127.0.0.1', 6002, 'Online']}
+>>> send userB Hello B            
+>>> [Message sent!]
+>>> [The header is ack.]
+>>> [message: This is an ACK from client]
+>>> [Message received by userB.]
+>>> [The header is send.]
+>>> userC: Hello A 
+>>> [ACK Sent!]
+>>>  dereg userA 
+>>> [The header is ack-dereg.]
+>>> [You are Offline. Bye.]
+
+Output for userB:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online'], 'userB': ['127.0.0.1', 6001, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online'], 'userB': ['127.0.0.1', 6001, 'Online'], 'userC': ['127.0.0.1', 6002, 'Online']}
+>>> [The header is send.]
+>>> userA: Hello B 
+>>> [ACK Sent!]
+>>> send userC Hello C
+>>> [Message sent!]
+>>> [The header is ack.]
+>>> [message: This is an ACK from client]
+>>> [Message received by userC.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Offline'], 'userB': ['127.0.0.1', 6001, 'Online'], 'userC': ['127.0.0.1', 6002, 'Online']}
+>>> send userA Are u here?
+>>> [This client is not available at this point.]
+>>> ^C% 
+
+Output for userC:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Online'], 'userB': ['127.0.0.1', 6001, 'Online'], 'userC': ['127.0.0.1', 6002, 'Online']}
+>>> [The header is send.]
+>>> userB: Hello C 
+>>> [ACK Sent!]
+>>> send userA Hello A
+>>> [Message sent!]
+>>> [The header is ack.]
+>>> [message: This is an ACK from client]
+>>> [Message received by userA.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6000, 'Offline'], 'userB': ['127.0.0.1', 6001, 'Online'], 'userC': ['127.0.0.1', 6002, 'Online']}
+>>> send userA Are u here?
+>>> [This client is not available at this point.]
+>>> ^C%                                                                                 
+
+
+Test Codes 2:
+
+ython3 ChatApp.py -s 5000
+python3 ChatApp.py -c userA localhost 5000 6000
+python3 ChatApp.py -c userB localhost 5000 6001
+userB: dereg userB
+Server: close terminal
+userA: send userB hello
+
+Output for Server:
+
+>>> [Server is online...]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [ACK Sent!]
+^Z
+zsh: suspended  python3 ChatApp.py -s 5001
+
+
+Output for userA:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6003, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6003, 'Online'], 'userB': ['127.0.0.1', 6004, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6003, 'Online'], 'userB': ['127.0.0.1', 6004, 'Offline']}
+>>>  send userB hello
+>>> [This client is not available at this point.]
+
+Output for userB:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6003, 'Online'], 'userB': ['127.0.0.1', 6004, 'Online']}
+>>> dereg userB  
+>>> [The header is ack-dereg.]
+>>> [You are Offline. Bye.]
+
+
+Test Codes 3:
+
+python3 ChatApp.py -s 5000
+python3 ChatApp.py -c userA localhost 5000 6000
+python3 ChatApp.py -c userB localhost 5000 6001
+python3 ChatApp.py -c userC localhost 5000 6002
+python3 ChatApp.py -c userD localhost 5000 6003
+userA: create_group family
+userA, userB, userC: join_group family
+userA: send_group hello my family!
+userD: send userB am I part of the family?
+userA: leave_group
+userB, userC, userD: control C
+
+Output for Server:
+
+>>> [Server is online...]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [Client table updated.]
+>>> [ACK Sent!]
+>>> [Client userA created group family successfully.]
+>>> [ACK Sent!]
+>>> [Client userA joined group family.]
+>>> [The current group chats info are: {'family': ['userA']}
+>>> [ACK Sent!]
+>>> [Client userB joined group family.]
+>>> [The current group chats info are: {'family': ['userA', 'userB']}
+>>> [ACK Sent!]
+>>> [Client userC joined group family.]
+>>> [The current group chats info are: {'family': ['userA', 'userB', 'userC']}
+>>> [Client userA sent group message: hi my family! ]
+>>> [Client userA left group family]
+>>> [The current group chats info are: {'family': ['userB', 'userC']}
+>>> [ACK Sent!]
+
+Output for userA:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online'], 'userC': ['127.0.0.1', 6018, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online'], 'userC': ['127.0.0.1', 6018, 'Online'], 'userD': ['127.0.0.1', 6019, 'Online']}
+>>> create_group family
+>>> [The header is ack-create-group.]
+>>> [Group family created by Server.]
+>>>  join_group family
+>>> [The header is ack-join-group.]
+>>> [Entered group family successfully.]
+>>> (family) send_group hi my family!
+>>> (family) [The header is ack-group.]
+>>> (family) [Message received by Server.]
+>>> (family) leave_group
+>>> [Leave group chat .]
+>>> userD: am I part of the family? 
+>>> ^C%                                  
+
+Output for userB/C:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online'], 'userC': ['127.0.0.1', 6018, 'Online']}
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online'], 'userC': ['127.0.0.1', 6018, 'Online'], 'userD': ['127.0.0.1', 6019, 'Online']}
+>>>  join_group family
+>>> [The header is ack-join-group.]
+>>> [Entered group family successfully.]
+>>> (family) [The header is ack-group.]
+>>> (family) Group_Message userA: hi my family! 
+>>> (family) ^C%                                                  
+
+Output for userD:
+
+>>> [Welcome, You are registered.]
+>>> [Client table updated.]
+{'userA': ['127.0.0.1', 6015, 'Online'], 'userB': ['127.0.0.1', 6016, 'Online'], 'userC': ['127.0.0.1', 6018, 'Online'], 'userD': ['127.0.0.1', 6019, 'Online']}
+>>> send userA am I part of the family?
+>>> [Message sent!]
+>>> [The header is ack.]
+>>> [message: This is an ACK from client]
+>>> [Message received by userA.]
+>>> ^C%                
