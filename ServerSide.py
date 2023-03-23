@@ -20,6 +20,7 @@ def server(port_num):
             buffer, client_address = server_socket.recvfrom(4096)
             buffer = buffer.decode()
         except KeyboardInterrupt:
+            server_socket.close()
             os._exit(1)
         lines = buffer.splitlines()
         header = lines[1]

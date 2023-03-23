@@ -17,12 +17,11 @@ group = ""
 server_ip = ""
 server_port = 0
 message_queue = []
-
+semaphore = threading.Semaphore(1)
 
 def client(user_name, ip, port, client_port):
     # initialization
-    # semaphore = threading.Semaphore(1)
-    global name, is_ack_c, is_ack_s, mode, group, server_port, server_ip, waitFor
+    global name, is_ack_c, is_ack_s, mode, group, server_port, server_ip, waitFor, semaphore
     name = user_name
     server_ip = ip
     server_port = port
@@ -233,10 +232,8 @@ def client_listen():
             msg = lines[7]
             source_name = lines[5]
             if mode == "normal":
-                displayMsg(f'[The header is {header}.]')
                 displayMsg(f"{source_name}: " + msg)
                 client_res(sender_address[0], source_port)
-                displayMsg("[ACK Sent!]")
             else:
                 message_queue.append(f"{source_name}: " + msg)
                 client_res(sender_address[0], source_port)
@@ -244,14 +241,11 @@ def client_listen():
         elif header == "ack":
             source_name = lines[5]
             if source_name == waitFor:
-                displayMsg(f'[The header is {header}.]')
                 msg = lines[7]
                 is_ack_c = True
-                displayMsg(f"[message: {msg}]")
         # when receive ack for creating new group
         elif header == "ack-create-group":
             is_ack_s = True
-            displayMsg(f'[The header is {header}.]')
             value = lines[3]
             group_name = lines[5]
             if value == "approve":
@@ -261,7 +255,6 @@ def client_listen():
         # when receive ack for listing all group names
         elif header == "ack-groups-result":
             is_ack_s = True
-            displayMsg(f'[The header is {header}.]')
             group_names = json.loads(lines[3])
             displayMsg("[Available group chats:]")
             for group_name in group_names:
@@ -269,7 +262,6 @@ def client_listen():
         # when receive ack for joining a specific group
         elif header == "ack-join-group":
             is_ack_s = True
-            displayMsg(f'[The header is {header}.]')
             value = lines[3]
             group_name = lines[5]
             if value == "approve":
@@ -281,7 +273,6 @@ def client_listen():
         # when receive ack for sending group messages from server
         elif header == "ack-group":
             sender_name = lines[3]
-            displayMsg(f'[The header is {header}.]')
             msg = lines[5]
             if sender_name == name:
                 is_ack_s = True
@@ -292,7 +283,6 @@ def client_listen():
         # when receive ack for list all members within the group
         elif header == "member-result":
             is_ack_s = True
-            displayMsg(f'[The header is {header}.]')
             members = json.loads(lines[3])
             displayMsg(f"[Members in the group {group}:]")
             for member in members:
@@ -306,7 +296,6 @@ def client_listen():
         # when receive ack for unregistering self
         elif header == "ack-dereg":
             is_ack_s = True
-            displayMsg(f'[The header is {header}.]')
         else:
             displayMsg("[Unknown header.]")
 
