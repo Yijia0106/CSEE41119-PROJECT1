@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 from socket import *
@@ -15,8 +16,11 @@ def server(port_num):
     server_socket.bind(('localhost', port_num))
 
     while True:
-        buffer, client_address = server_socket.recvfrom(4096)
-        buffer = buffer.decode()
+        try:
+            buffer, client_address = server_socket.recvfrom(4096)
+            buffer = buffer.decode()
+        except KeyboardInterrupt:
+            os._exit(1)
         lines = buffer.splitlines()
         header = lines[1]
         client_port = int(lines[3])

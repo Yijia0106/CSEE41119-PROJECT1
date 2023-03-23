@@ -9,12 +9,12 @@ if __name__ == "__main__":
     if mode == '-s':
         try:
             server_port = int(sys.argv[2])
-            if checkPort(server_port):
-                server(server_port)
-            else:
-                print(">>> Invalid port range!")
         except:
             print(">>> Invalid port number!")
+        if checkPort(server_port):
+            server(server_port)
+        else:
+            print(">>> Invalid port range!")
 
 
     elif mode == '-c':
@@ -24,11 +24,11 @@ if __name__ == "__main__":
             try:
                 server_port = int(sys.argv[4])
                 client_port = int(sys.argv[5])
-                if checkPort(server_port) and checkPort(client_port):
-                    client(user_name, server_ip, server_port, client_port)
-                else:
-                    print(">>> Invalid port range!")
             except:
                 print(">>> Invalid port number!")
+            if checkPort(server_port) and checkPort(client_port):
+                client(user_name, server_ip, server_port, client_port)
+            else:
+                print(">>> Invalid port range!")
         else:
             print(">>> Invalid IP address")

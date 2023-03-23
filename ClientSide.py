@@ -182,7 +182,6 @@ def client(user_name, ip, port, client_port):
             # command to leave group
             elif header == "leave_group":
                 if mode == "inGroup":
-                    group = ""
                     to_send = "header:\n" + header + "\n" + "port:\n" + str(
                         client_port) + "\nsource:\n" + name + "\ngroup:\n" + group
                     client_socket.sendto(to_send.encode(), (server_ip, server_port))
@@ -301,8 +300,9 @@ def client_listen():
         # when receive ack for leaving a group
         elif header == "ack-leave-group":
             is_ack_s = True
-            mode = "normal"
             displayMsg(f"[Leave group chat {group}.]")
+            group = ""
+            mode = "normal"
         # when receive ack for unregistering self
         elif header == "ack-dereg":
             is_ack_s = True
